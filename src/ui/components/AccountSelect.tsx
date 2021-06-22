@@ -1,6 +1,5 @@
 import Select, { components, OptionTypeBase } from "react-select";
 import React, { useMemo, useCallback } from "react";
-import Image from 'next/image'
 import styled, { useTheme, DefaultTheme } from "styled-components";
 import Color from "color";
 import { Account } from "../../types/types";
@@ -32,7 +31,7 @@ const AccountAddress = styled.span`
 
 const AccountIcon = () => (
     <IconContainer>
-        <Image src="/icons/ethereum.svg" width={24} height={24} />
+        <img src="/icons/ethereum.svg" width={24} height={24} />
     </IconContainer>
 );
 
