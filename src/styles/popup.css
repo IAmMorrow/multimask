@@ -1,6 +1,6 @@
-body {
-    min-width: 400px;
-    min-height: 400px;
+#root {
+    width: 360px;
+    height: 600px;
 }
 
 .popup-padded {
