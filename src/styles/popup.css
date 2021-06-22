@@ -1,4 +1,12 @@
-body, #root {
+body {
+    max-width: 360px;
+    max-height: 600px;
+    font-family: Inter;
+    background-color: #131314;
+    margin: 0;
+}
+
+#root {
     width: 360px;
     height: 600px;
 }
