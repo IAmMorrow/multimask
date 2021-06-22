@@ -27,7 +27,7 @@ chrome.extension.onRequest.addListener(
             case "connect":
                 onConnect();
             case "send":
-                onSend(request.params)
+                onSend(request.params);
                 break;
             default:
                 break;

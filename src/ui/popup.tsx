@@ -4,11 +4,12 @@ import styled from "styled-components"
 import { Reset } from "styled-reset"
 
 import "../styles/popup.css"
+import { Wallet } from "./wallet"
 
 const Container = styled.div`
-    width: 360px;
-    height: 600px;
-    background-color: black;
+    width: 100%;
+    height: 100%;
+    background-color: #131314;
 `
 
 class Hello extends React.Component {
@@ -16,8 +17,7 @@ class Hello extends React.Component {
         return (
             <Container>
                 <Reset />
-                test
-                <h1>{ chrome.i18n.getMessage("l10nHello") }</h1>
+                <Wallet />
             </Container>
         )
     }
