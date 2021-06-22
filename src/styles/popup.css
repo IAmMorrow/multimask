@@ -1,19 +1,12 @@
 body {
     max-width: 360px;
     max-height: 600px;
-    font-family: Inter;
     background-color: #131314;
     margin: 0;
 }
 
 #root {
+    font-family: 'Inter';
     width: 360px;
     height: 600px;
-}
-
-.popup-padded {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
 }
