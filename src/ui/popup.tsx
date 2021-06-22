@@ -11,7 +11,6 @@ import * as animationData from './icons/data.json'
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    background-color: #131314;
 `
 
 
@@ -47,8 +46,8 @@ class Hello extends React.Component<{}, { loading: boolean }> {
             <div>
                 <Lottie 
                     options={defaultOptions}
-                    height={"100%"}
-                    width={"100%"}
+                    height={600}
+                    width={360}
                 />
             </div>
             )

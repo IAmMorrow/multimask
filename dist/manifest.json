@@ -23,7 +23,8 @@
     "permissions": [
       "https://*/*"
     ],
-    "content_security_policy": "default-src 'self'; style-src 'self' data: 'unsafe-inline';",
+    "web_accessible_resources": ["*.ttf" ],
+    "content_security_policy": "connect-src 'self'; default-src 'self'; style-src 'self' fonts.googleapis.com data: 'unsafe-inline'; font-src fonts.gstatic.com data: 'unsafe-inline'",
     "content_scripts": [
       {
         "matches": [
