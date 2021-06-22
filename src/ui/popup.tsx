@@ -5,15 +5,54 @@ import { Reset } from "styled-reset"
 
 import "../styles/popup.css"
 import { Wallet } from "./wallet"
-
+import Lottie from "react-lottie";
+import * as animationData from './icons/data.json'
+ 
 const Container = styled.div`
     width: 100%;
     height: 100%;
     background-color: #131314;
 `
 
-class Hello extends React.Component {
+
+const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  };
+class Hello extends React.Component<{}, { loading: boolean }> {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+          loading: true,
+        };
+      }
+
+
+      componentDidMount() {
+          setTimeout(() => {
+            this.setState({
+              loading: false,
+            });
+          }, 5000)
+        }
+
     render() {
+        if (this.state.loading){
+            return (
+            <div>
+                <Lottie 
+                    options={defaultOptions}
+                    height={"100%"}
+                    width={"100%"}
+                />
+            </div>
+            )
+        }
         return (
             <Container>
                 <Reset />
@@ -22,8 +61,6 @@ class Hello extends React.Component {
         )
     }
 }
-
-// --------------
 
 ReactDOM.render(
     <Hello />,
