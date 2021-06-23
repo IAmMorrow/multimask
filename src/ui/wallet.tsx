@@ -25,23 +25,28 @@ const LogoContainer = styled.div`
 
 
 let websocket = null;
+
+/*
+function onSend(message: string) {
+    if (!websocket) {
+        throw new Error("send error: already connected");
+    }
+    websocket.send(message);
+}*/
+
+/*
 function createWebSocketConnection(host) {
     if('WebSocket' in window) {
         websocket = new WebSocket(host);
 
         websocket.onopen = function() {
             console.log("websocket connected");
+            onSend("{\"id\": 3,\"jsonrpc\": \"2.0\",\"method\": \"currency.list\",\"params\": {}}");
         };
 
         websocket.onmessage = function (event) {
             var received_msg = JSON.parse(event.data);
-            var notificationOptions = {
-                type: "basic",
-                title: received_msg.title,
-                message: received_msg.message,
-                iconUrl: "extension-icon.png"
-            }
-            chrome.notifications.create("", notificationOptions);
+            console.log(received_msg.result);
         };
 
         websocket.onclose = function() {
@@ -49,24 +54,44 @@ function createWebSocketConnection(host) {
         };
     }
 }
-
-function onConnect() {
-    createWebSocketConnection("ws://127.0.0.1:8084");
-}
+*/
 
 
 export function Wallet() {
+    const createWebSocketConnection = (host: string)=> {
+        if('WebSocket' in window) {
+            websocket = new WebSocket(host);    
+            websocket.onopen = function() {
+                console.log("websocket connected");
+                onSend("{\"id\": 3,\"jsonrpc\": \"2.0\",\"method\": \"currency.list\",\"params\": {}}");
+            };    
+            websocket.onmessage = function (event) {
+                var received_msg = JSON.parse(event.data);
+                console.log(received_msg.result);
+                //setCurrencies(currencies);
+                setCurrencies(received_msg.result);
+            };    
+            websocket.onclose = function() {
+                alert("==== web socket closed ======");
+            };
+        }
+    };
+    const onSend= (message: string) => {
+        websocket.send(message);
+    };
     useEffect(() => {
         console.log("connecting websocket");
         if (!websocket){
-            onConnect();
+            createWebSocketConnection("ws://127.0.0.1:8084");
         }
       }, []);
-    const [ selectedCurrency, setSelectedCurrency ] = useState(undefined);
+    const [ selectedCurrency, setSelectedCurrency] = useState(undefined);
+    const [currencies, setCurrencies] = useState([]);
 
     const onCurrencyChange = useCallback((currency) => {
         setSelectedCurrency(selectedCurrency);
     }, []);
+
 
     return (
         <WalletContainer>
@@ -74,7 +99,7 @@ export function Wallet() {
                 <LogoContainer>
                     <Logo height={36} width={41} />
                 </LogoContainer>
-                <CurrencySelect currencies={[]} onCurrencyChange={onCurrencyChange} selectedCurrency={selectedCurrency} />
+                <CurrencySelect currencies={currencies} onCurrencyChange={onCurrencyChange} selectedCurrency={selectedCurrency} />
             </TopBar>
         </WalletContainer>
     );
