@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useCallback, useState } from "react";
 import { Logo } from "./icons/logo";
+import { useEffect } from 'react';
 import { CurrencySelect } from "./components/CurrencySelect";
 import { currencies } from "./currencies";
 import { AccountSummary } from "./AccountSummary";
@@ -27,7 +28,42 @@ const AccountContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    overflow: scroll;
 `
+
+
+let websocket = null;
+
+/*
+function onSend(message: string) {
+    if (!websocket) {
+        throw new Error("send error: already connected");
+    }
+    websocket.send(message);
+}*/
+
+/*
+function createWebSocketConnection(host) {
+    if('WebSocket' in window) {
+        websocket = new WebSocket(host);
+
+        websocket.onopen = function() {
+            console.log("websocket connected");
+            onSend("{\"id\": 3,\"jsonrpc\": \"2.0\",\"method\": \"currency.list\",\"params\": {}}");
+        };
+
+        websocket.onmessage = function (event) {
+            var received_msg = JSON.parse(event.data);
+            console.log(received_msg.result);
+        };
+
+        websocket.onclose = function() {
+            alert("==== web socket closed ======");
+        };
+    }
+}
+*/
+
 
 export function Wallet() {
     const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);

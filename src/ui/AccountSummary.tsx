@@ -6,11 +6,15 @@ import { AccountSelect } from "./components/AccountSelect";
 import { deserializeAccount } from "../lib/serializers";
 import { currencies } from "./currencies";
 import { Buy, Exchange, Send, Receive } from "./icons/Buy";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { NFTViewer } from "./NFTViewer";
+import { BigText } from "./common";
 
 const accounts2 = accounts.map(deserializeAccount);
 
 const getAccountBalance = (account: Account, currency: Currency) => {
-    return `${account.balance.dividedBy(10 ** currency.units[0].magnitude).toString()} ${currency.ticker}`
+    return `${account.balance.dividedBy(10 ** currency.units[0].magnitude).toFixed(6)} ${currency.ticker}`
 }
 
 const AccountSummaryContainer = styled.div`
@@ -32,6 +36,7 @@ const BalanceValue = styled.div`
     font-size: 28px;
     line-height: 33.6px;
     margin-top: 16px;
+    text-align: center;
 `;
 
 const AddressContainer = styled.div`
@@ -109,6 +114,7 @@ function ActionButton({label, Icon, url}: ActionButtonProps) {
 const ActionContainer = styled.div`
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
 `;
 
 export function AccountSummary({ currency }: AccountSummaryProps) {
@@ -149,6 +155,34 @@ export function AccountSummary({ currency }: AccountSummaryProps) {
                 <ActionButton label="Send" Icon={Send} url="ledgerlive://send" />
                 <ActionButton label="Receive" Icon={Receive} url="ledgerlive://receive" />
             </ActionContainer>
+            <Tabs>
+                <TabList>
+                    <Tab>TRANSACTIONS</Tab>
+                    {
+                        currency.id === "ethereum" ? (
+                            <Fragment>
+                                <Tab>NFTs</Tab>
+                                <Tab>ASSETS</Tab>
+                            </Fragment>
+                        ) : null
+                    }
+                </TabList>
+                <TabPanel>
+                    <BigText text="Coming soon !" />
+                </TabPanel>
+                {
+                        currency.id === "ethereum" ? (
+                            <Fragment>
+                                <TabPanel>
+                                    <NFTViewer account={selectedAccount} />
+                                </TabPanel>
+                                <TabPanel>
+                                <BigText text="Coming soon !" />
+                                </TabPanel>
+                            </Fragment>
+                        ) : null
+                    }
+            </Tabs>
         </Fragment>
     );
 }
