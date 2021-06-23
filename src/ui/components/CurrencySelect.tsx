@@ -4,11 +4,20 @@ import styled, { useTheme, DefaultTheme } from "styled-components";
 import Color from "color";
 import { Currency } from "../../types/types";
 import { defaultTheme } from "../../styles/theme";
+import { getSelectStyles } from "./selectTheme";
 
 const IconContainer = styled.div`
     margin-right: 0.4em;
     flex-shrink: 0;
 `
+
+const CurrencyDot = styled.div`
+    background-color: ${props => props.color};
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 10px;
+`;
 
 const AccountDetails = styled.div`
     display: flex;
@@ -21,6 +30,7 @@ const AccountName = styled.span`
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: bold;
+    color: #ffffff;
 `
 
 const AccountAddress = styled.span`
@@ -37,56 +47,19 @@ const AccountIcon = () => (
 
 const AccountOption: typeof components.Option = ({ children, data, ...rest }) => (
     <components.Option data={data} {...rest}>
-        <AccountIcon />
+        <CurrencyDot color={data.data.color} />
         <AccountDetails>
             <AccountName>{children}</AccountName>
-            <AccountAddress>{data.value}</AccountAddress>
         </AccountDetails>
     </components.Option>
 );
 
-const AccountSummary: typeof components.SingleValue = ({ children, ...rest }) =>
+const AccountSummary: typeof components.SingleValue = ({ children, data,...rest }) =>
     <components.SingleValue {...rest}>
-        <AccountIcon />
+        <CurrencyDot color={data.data.color} />
         <AccountName>{children}</AccountName>
     </components.SingleValue>
 
-const getSelectStyles = (theme: DefaultTheme) => ({
-    control: (provided: any) => ({
-        ...provided,
-        width: 200,
-        backgroundColor: "transparent",
-    }),
-    singleValue: (provided: any) => ({
-        ...provided,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        fontSize: 12,
-        color: theme.colors.text,
-    }),
-    indicatorsContainer: (provided: any) => ({
-        ...provided,
-        color: "red",
-    }),
-    menu: (provided: any) => ({
-        ...provided,
-        backgroundColor: theme.colors.background,
-    }),
-    option: (provided: any, { isFocused, isSelected }: { isFocused: boolean, isSelected: boolean }) => ({
-        ...provided,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        fontSize: 12,
-        color: isSelected ? "#fff" : theme.colors.text,
-        backgroundColor: isSelected
-            ? new Color(theme.colors.primary).alpha(isFocused ? 0.8 : 1).string()
-            : isFocused
-                ? new Color(theme.colors.primary).alpha(0.1).string()
-                : "transparent",
-    })
-});
 
 type CurrencySelectorProps = {
     currencies: Currency[],
@@ -99,7 +72,7 @@ function fromCurrencyToOption(currency: Currency): OptionTypeBase {
         label: currency.name,
         value: currency.id,
         data: {
-
+            color: currency.color,
         },
     }
 }
@@ -119,7 +92,7 @@ export function CurrencySelect({ currencies, onCurrencyChange, selectedCurrency 
     return (
         <div>
         <Select
-            instanceId="account"
+            instanceId="currency"
             options={options}
             styles={styles}
             components={{ SingleValue: AccountSummary, Option: AccountOption}}

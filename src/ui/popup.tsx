@@ -15,7 +15,7 @@ const Container = styled.div`
 
 
 const defaultOptions = {
-    loop: true,
+    loop: false,
     autoplay: true,
     animationData: animationData,
     rendererSettings: {
@@ -37,7 +37,7 @@ class Hello extends React.Component<{}, { loading: boolean }> {
             this.setState({
               loading: false,
             });
-          }, 5000)
+          }, 4013)
         }
 
     render() {

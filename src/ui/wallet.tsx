@@ -2,6 +2,8 @@ import styled from "styled-components";
 import React, { useCallback, useState } from "react";
 import { Logo } from "./icons/logo";
 import { CurrencySelect } from "./components/CurrencySelect";
+import { currencies } from "./currencies";
+import { AccountSummary } from "./AccountSummary";
 
 const TopBar = styled.div`
     width: 100%;
@@ -16,27 +18,39 @@ const TopBar = styled.div`
 const WalletContainer = styled.div`
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
-const LogoContainer = styled.div`
-
+const AccountContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 `
 
 export function Wallet() {
-    const [ selectedCurrency, setSelectedCurrency ] = useState(undefined);
+    const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
 
     const onCurrencyChange = useCallback((currency) => {
-        setSelectedCurrency(selectedCurrency);
+        setSelectedCurrency(currency);
     }, []);
-    
+
     return (
         <WalletContainer>
             <TopBar>
-                <LogoContainer>
+                <div>
                     <Logo height={36} width={41} />
-                </LogoContainer>
-                <CurrencySelect currencies={[]} onCurrencyChange={onCurrencyChange} selectedCurrency={selectedCurrency} />
+                </div>
+                <CurrencySelect currencies={currencies} onCurrencyChange={onCurrencyChange} selectedCurrency={selectedCurrency} />
             </TopBar>
+            <AccountContainer>
+            {
+                !!selectedCurrency ? (
+                    <AccountSummary currency={selectedCurrency} />
+                ) : null                    
+            }
+            </AccountContainer>
         </WalletContainer>
     );
 }

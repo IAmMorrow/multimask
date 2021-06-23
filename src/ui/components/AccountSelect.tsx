@@ -2,13 +2,22 @@ import Select, { components, OptionTypeBase } from "react-select";
 import React, { useMemo, useCallback } from "react";
 import styled, { useTheme, DefaultTheme } from "styled-components";
 import Color from "color";
-import { Account } from "../../types/types";
+import { Account, Currency } from "../../types/types";
 import { defaultTheme } from "../../styles/theme";
+import { getSelectStyles } from "./selectTheme";
 
 const IconContainer = styled.div`
     margin-right: 0.4em;
     flex-shrink: 0;
 `
+
+const AccountDot = styled.div`
+    background-color: ${props => props.color};
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+`;
 
 const AccountDetails = styled.div`
     display: flex;
@@ -37,7 +46,7 @@ const AccountIcon = () => (
 
 const AccountOption: typeof components.Option = ({ children, data, ...rest }) => (
     <components.Option data={data} {...rest}>
-        <AccountIcon />
+        <AccountDot color={data.data.color} />
         <AccountDetails>
             <AccountName>{children}</AccountName>
             <AccountAddress>{data.value}</AccountAddress>
@@ -45,69 +54,34 @@ const AccountOption: typeof components.Option = ({ children, data, ...rest }) =>
     </components.Option>
 );
 
-const AccountSummary: typeof components.SingleValue = ({ children, ...rest }) =>
+const AccountSummary: typeof components.SingleValue = ({ children, data, ...rest }) =>
     <components.SingleValue {...rest}>
-        <AccountIcon />
+        <AccountDot color={data.data.color} />
         <AccountName>{children}</AccountName>
     </components.SingleValue>
-
-const getSelectStyles = (theme: DefaultTheme) => ({
-    control: (provided: any) => ({
-        ...provided,
-        width: 400,
-        backgroundColor: "transparent",
-    }),
-    singleValue: (provided: any) => ({
-        ...provided,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        fontSize: 12,
-        color: theme.colors.text,
-    }),
-    indicatorsContainer: (provided: any) => ({
-        ...provided,
-        color: "red",
-    }),
-    menu: (provided: any) => ({
-        ...provided,
-        backgroundColor: theme.colors.background,
-    }),
-    option: (provided: any, { isFocused, isSelected }: { isFocused: boolean, isSelected: boolean }) => ({
-        ...provided,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        fontSize: 12,
-        color: isSelected ? "#fff" : theme.colors.text,
-        backgroundColor: isSelected
-            ? new Color(theme.colors.primary).alpha(isFocused ? 0.8 : 1).string()
-            : isFocused
-                ? new Color(theme.colors.primary).alpha(0.1).string()
-                : "transparent",
-    })
-});
 
 type AccountSelectorProps = {
     accounts: Account[],
     onAccountChange: (account: Account | undefined) => void,
     selectedAccount: Account | undefined,
+    currency: Currency,
 };
 
-function fromAccountToOption(account: Account): OptionTypeBase {
+function fromAccountToOption(account: Account, currency: Currency): OptionTypeBase {
     return {
         label: account.name,
         value: account.address,
         data: {
             balance: account.balance,
+            color: currency.color,
         },
     }
 }
 
-export function AccountSelect({ accounts, onAccountChange, selectedAccount }: AccountSelectorProps) {
+export function AccountSelect({ accounts, onAccountChange, selectedAccount, currency }: AccountSelectorProps) {
     const theme = defaultTheme;
-    const options = useMemo(() => accounts.map(account => fromAccountToOption(account)), [accounts]);
-    const value = useMemo(() => selectedAccount ? fromAccountToOption(selectedAccount) : undefined, [selectedAccount]);
+    const options = useMemo(() => accounts.map(account => fromAccountToOption(account, currency)), [accounts]);
+    const value = useMemo(() => selectedAccount ? fromAccountToOption(selectedAccount, currency) : undefined, [selectedAccount]);
 
     const styles = useMemo(() => getSelectStyles(theme), [theme]);
 
